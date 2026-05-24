@@ -415,23 +415,28 @@
   .gender-tab.active.male-tab { border-color: var(--male-accent); background: var(--male-light); color: var(--male-accent); }
   .gender-tab.active.female-tab { border-color: var(--female-accent); background: var(--female-light); color: var(--female-accent); }
 
-  /* DELETE */
-  .delete-btn {
+  /* CARD ACTION BUTTONS */
+  .card-actions {
     position: absolute;
     top: 10px; right: 10px;
-    width: 22px; height: 22px;
+    display: flex; gap: 4px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .patient-card:hover .card-actions { opacity: 1; }
+  .action-btn {
+    width: 24px; height: 24px;
     border-radius: 50%;
     background: transparent;
     border: none;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    color: var(--text-light);
-    font-size: 0.9rem;
-    opacity: 0;
+    font-size: 0.8rem;
     transition: all 0.15s;
+    color: var(--text-light);
   }
-  .patient-card:hover .delete-btn { opacity: 1; }
-  .delete-btn:hover { background: #fee2e2; color: #dc2626; }
+  .action-btn.edit:hover { background: #dbeafe; color: #2563c4; }
+  .action-btn.delete:hover { background: #fee2e2; color: #dc2626; }
 
   .empty-state {
     grid-column: 1/-1;
@@ -526,7 +531,7 @@
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">New Patient</div>
+      <div class="modal-title" id="modal-title">New Patient</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -573,6 +578,7 @@
   // ── State ──────────────────────────────────────────
   let patients = JSON.parse(localStorage.getItem('pulmo_patients') || '[]');
   let selectedGender = 'male';
+  let editingId = null; // null = adding new, number = editing existing
   const today = new Date().toISOString().split('T')[0];
 
   // ── Init ───────────────────────────────────────────
@@ -591,10 +597,33 @@
 
   // ── Modal ──────────────────────────────────────────
   function openModal() {
+    editingId = null;
+    document.getElementById('modal-title').textContent = 'New Patient';
+    document.getElementById('submit-btn').textContent = 'Add Patient';
+    clearForm();
     document.getElementById('modal-overlay').classList.add('open');
   }
+
+  function openEditModal(id) {
+    const p = patients.find(x => x.id === id);
+    if (!p) return;
+    editingId = id;
+    document.getElementById('modal-title').textContent = 'Edit Patient';
+    document.getElementById('submit-btn').textContent = 'Save Changes';
+    // Fill form with existing data
+    document.getElementById('inp-name').value = p.name || '';
+    document.getElementById('inp-age').value = p.age || '';
+    document.getElementById('inp-date').value = p.date || today;
+    document.getElementById('inp-complaint').value = p.complaint || '';
+    document.getElementById('inp-diagnosis').value = p.diagnosis || '';
+    document.getElementById('inp-history').value = p.history || '';
+    selectGender(p.gender || 'male');
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
   function closeModal() {
     document.getElementById('modal-overlay').classList.remove('open');
+    editingId = null;
     clearForm();
   }
   function closeModalOutside(e) {
@@ -606,7 +635,7 @@
     selectGender('male');
   }
 
-  // ── Add Patient ────────────────────────────────────
+  // ── Add / Save Patient ─────────────────────────────
   function addPatient() {
     const name = document.getElementById('inp-name').value.trim();
     const age = document.getElementById('inp-age').value.trim();
@@ -620,12 +649,17 @@
       return;
     }
 
-    const patient = {
-      id: Date.now(),
-      gender: selectedGender,
-      name, age, date, complaint, diagnosis, history
-    };
-    patients.push(patient);
+    if (editingId !== null) {
+      // Update existing
+      patients = patients.map(p => p.id === editingId
+        ? { ...p, gender: selectedGender, name, age, date, complaint, diagnosis, history }
+        : p
+      );
+    } else {
+      // Add new
+      patients.push({ id: Date.now(), gender: selectedGender, name, age, date, complaint, diagnosis, history });
+    }
+
     save();
     renderAll();
     closeModal();
@@ -665,7 +699,6 @@
     const grid = document.getElementById(gridId);
     const emptyEl = document.getElementById(emptyId);
 
-    // Remove old cards (keep empty state)
     Array.from(grid.children).forEach(child => {
       if (!child.id.endsWith('-empty')) child.remove();
     });
@@ -681,7 +714,10 @@
       card.className = `patient-card ${gender}`;
       const admitFormatted = p.date ? new Date(p.date + 'T00:00:00').toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'}) : '—';
       card.innerHTML = `
-        <button class="delete-btn" onclick="deletePatient(${p.id})" title="Remove patient">✕</button>
+        <div class="card-actions">
+          <button class="action-btn edit" onclick="openEditModal(${p.id})" title="Edit patient">✏️</button>
+          <button class="action-btn delete" onclick="deletePatient(${p.id})" title="Remove patient">✕</button>
+        </div>
         <div class="card-header">
           <div>
             <div class="patient-name">${escape(p.name)}</div>
