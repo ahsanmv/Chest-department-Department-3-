@@ -1,1 +1,721 @@
 # Chest-department-Department-3-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulmonology — Ward Handover</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8eef5;
+    --border: #d0dce8;
+    --male-accent: #2563c4;
+    --male-light: #dbeafe;
+    --male-mid: #93b8f5;
+    --female-accent: #b0267a;
+    --female-light: #fce7f3;
+    --female-mid: #f0a0cc;
+    --text: #1a2535;
+    --text-muted: #5a6a7e;
+    --text-light: #8a9ab0;
+    --tag-bg: #eef2f7;
+    --shadow: 0 2px 12px rgba(30,60,100,0.08);
+    --shadow-hover: 0 8px 32px rgba(30,60,100,0.15);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 8px rgba(30,60,100,0.07);
+  }
+  .header-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 16px;
+  }
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, #2563c4 0%, #1e90c0 100%);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon svg { width: 22px; height: 22px; fill: white; }
+  .dept-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .dept-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .date-badge {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 0.83rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-primary {
+    background: var(--male-accent);
+    color: white;
+  }
+  .btn-primary:hover { background: #1a4fa8; }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .btn-ghost:hover { background: var(--tag-bg); }
+
+  /* MAIN */
+  main {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    flex: 1;
+    min-width: 120px;
+    box-shadow: var(--shadow);
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-value.male { color: var(--male-accent); }
+  .stat-value.female { color: var(--female-accent); }
+
+  /* SECTION */
+  .ward-section {
+    margin-bottom: 48px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .section-label {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+  }
+  .section-label.male { color: var(--male-accent); }
+  .section-label.female { color: var(--female-accent); }
+  .section-count {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+  .section-count.male {
+    background: var(--male-light);
+    color: var(--male-accent);
+  }
+  .section-count.female {
+    background: var(--female-light);
+    color: var(--female-accent);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .section-line.male { background: linear-gradient(to right, var(--male-mid), transparent); }
+  .section-line.female { background: linear-gradient(to right, var(--female-mid), transparent); }
+
+  /* GRID */
+  .patient-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  /* PATIENT CARD */
+  .patient-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: default;
+    position: relative;
+  }
+  .patient-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+  }
+  .patient-card.male { border-top: 3px solid var(--male-accent); }
+  .patient-card.female { border-top: 3px solid var(--female-accent); }
+
+  .card-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid var(--surface2);
+  }
+  .patient-name {
+    font-weight: 600;
+    font-size: 0.97rem;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .patient-age {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .gender-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .gender-dot.male { background: var(--male-light); color: var(--male-accent); }
+  .gender-dot.female { background: var(--female-light); color: var(--female-accent); }
+
+  .card-body {
+    padding: 14px 18px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 11px;
+  }
+  .field:last-child { margin-bottom: 0; }
+  .field-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+  .field-value {
+    font-size: 0.87rem;
+    color: var(--text);
+    line-height: 1.45;
+  }
+  .field-value.mono {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .diagnosis-tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .diagnosis-tag.male {
+    background: var(--male-light);
+    border-color: var(--male-mid);
+    color: var(--male-accent);
+  }
+  .diagnosis-tag.female {
+    background: var(--female-light);
+    border-color: var(--female-mid);
+    color: var(--female-accent);
+  }
+
+  /* ADD PATIENT MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(20,35,55,0.45);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 24px 80px rgba(20,35,55,0.25);
+    animation: slideUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(24px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--text);
+  }
+  .modal-close {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--tag-bg); }
+  .modal-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .form-label {
+    font-size: 0.73rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .form-input, .form-select, .form-textarea {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text);
+    background: var(--surface);
+    transition: border-color 0.15s;
+    outline: none;
+    width: 100%;
+  }
+  .form-textarea { resize: vertical; min-height: 72px; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--male-accent);
+  }
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .btn-female { background: var(--female-accent); color: white; }
+  .btn-female:hover { background: #8e1e63; }
+  .gender-tabs {
+    display: flex; gap: 8px;
+  }
+  .gender-tab {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .gender-tab.active.male-tab { border-color: var(--male-accent); background: var(--male-light); color: var(--male-accent); }
+  .gender-tab.active.female-tab { border-color: var(--female-accent); background: var(--female-light); color: var(--female-accent); }
+
+  /* DELETE */
+  .delete-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: all 0.15s;
+  }
+  .patient-card:hover .delete-btn { opacity: 1; }
+  .delete-btn:hover { background: #fee2e2; color: #dc2626; }
+
+  .empty-state {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-light);
+    font-size: 0.9rem;
+  }
+  .empty-icon { font-size: 2.5rem; margin-bottom: 10px; opacity: 0.4; }
+
+  @media (max-width: 600px) {
+    main { padding: 20px 14px 48px; }
+    .header-inner { padding: 0 4px; }
+    .stats-bar { gap: 8px; }
+    .dept-title { font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.5 2 6 4.5 6 8c0 1.5.5 2.9 1.3 4L4 20h16l-3.3-8C17.5 10.9 18 9.5 18 8c0-3.5-2.5-6-6-6zm0 2c2.2 0 4 1.8 4 4 0 1-.3 1.9-.9 2.6l-.6.7.4 1H9.1l.4-1-.6-.7C8.3 9.9 8 9 8 8c0-2.2 1.8-4 4-4zm-3 11h6l1 3H8l1-3z"/></svg>
+      </div>
+      <div>
+        <div class="dept-title">Pulmonology</div>
+        <div class="dept-sub">Ward Handover</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="date-badge" id="today-date">—</div>
+      <button class="btn btn-ghost" onclick="openModal()">＋ Add Patient</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Total Patients</div>
+      <div class="stat-value" id="stat-total">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Male</div>
+      <div class="stat-value male" id="stat-male">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Female</div>
+      <div class="stat-value female" id="stat-female">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Admissions Today</div>
+      <div class="stat-value" id="stat-today">0</div>
+    </div>
+  </div>
+
+  <!-- Male Section -->
+  <div class="ward-section">
+    <div class="section-header">
+      <span class="section-label male">♂ Male Ward</span>
+      <span class="section-count male" id="male-count">0</span>
+      <div class="section-line male"></div>
+    </div>
+    <div class="patient-grid" id="male-grid">
+      <div class="empty-state" id="male-empty">
+        <div class="empty-icon">🫁</div>
+        <div>No male patients yet — add one above</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Female Section -->
+  <div class="ward-section">
+    <div class="section-header">
+      <span class="section-label female">♀ Female Ward</span>
+      <span class="section-count female" id="female-count">0</span>
+      <div class="section-line female"></div>
+    </div>
+    <div class="patient-grid" id="female-grid">
+      <div class="empty-state" id="female-empty">
+        <div class="empty-icon">🫁</div>
+        <div>No female patients yet — add one above</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">New Patient</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="form-label">Gender</div>
+        <div class="gender-tabs">
+          <button class="gender-tab male-tab active" id="tab-male" onclick="selectGender('male')">♂ Male</button>
+          <button class="gender-tab female-tab" id="tab-female" onclick="selectGender('female')">♀ Female</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-input" id="inp-name" placeholder="e.g. Ahmad bin Khalid" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Age</label>
+        <input class="form-input" id="inp-age" placeholder="e.g. 7 years / 4 months" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Admission Date</label>
+        <input class="form-input" id="inp-date" type="date" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Presenting Complaint</label>
+        <textarea class="form-textarea" id="inp-complaint" placeholder="Chief complaint(s) on admission…"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Diagnosis</label>
+        <input class="form-input" id="inp-diagnosis" placeholder="e.g. Community-acquired pneumonia" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">History</label>
+        <textarea class="form-textarea" id="inp-history" style="min-height:90px" placeholder="Relevant past medical, social, or family history…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="submit-btn" onclick="addPatient()">Add Patient</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── State ──────────────────────────────────────────
+  let patients = JSON.parse(localStorage.getItem('pulmo_patients') || '[]');
+  let selectedGender = 'male';
+  const today = new Date().toISOString().split('T')[0];
+
+  // ── Init ───────────────────────────────────────────
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-GB', {weekday:'short', year:'numeric', month:'short', day:'numeric'});
+  document.getElementById('inp-date').value = today;
+  renderAll();
+
+  // ── Gender tab ─────────────────────────────────────
+  function selectGender(g) {
+    selectedGender = g;
+    document.getElementById('tab-male').classList.toggle('active', g === 'male');
+    document.getElementById('tab-female').classList.toggle('active', g === 'female');
+    const btn = document.getElementById('submit-btn');
+    btn.className = 'btn ' + (g === 'male' ? 'btn-primary' : 'btn-female');
+  }
+
+  // ── Modal ──────────────────────────────────────────
+  function openModal() {
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    clearForm();
+  }
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+  function clearForm() {
+    ['inp-name','inp-age','inp-complaint','inp-diagnosis','inp-history'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('inp-date').value = today;
+    selectGender('male');
+  }
+
+  // ── Add Patient ────────────────────────────────────
+  function addPatient() {
+    const name = document.getElementById('inp-name').value.trim();
+    const age = document.getElementById('inp-age').value.trim();
+    const date = document.getElementById('inp-date').value;
+    const complaint = document.getElementById('inp-complaint').value.trim();
+    const diagnosis = document.getElementById('inp-diagnosis').value.trim();
+    const history = document.getElementById('inp-history').value.trim();
+
+    if (!name || !age || !date) {
+      alert('Please fill in at least Name, Age, and Admission Date.');
+      return;
+    }
+
+    const patient = {
+      id: Date.now(),
+      gender: selectedGender,
+      name, age, date, complaint, diagnosis, history
+    };
+    patients.push(patient);
+    save();
+    renderAll();
+    closeModal();
+  }
+
+  // ── Delete ─────────────────────────────────────────
+  function deletePatient(id) {
+    if (!confirm('Remove this patient from the list?')) return;
+    patients = patients.filter(p => p.id !== id);
+    save();
+    renderAll();
+  }
+
+  // ── Save ───────────────────────────────────────────
+  function save() {
+    localStorage.setItem('pulmo_patients', JSON.stringify(patients));
+  }
+
+  // ── Render ─────────────────────────────────────────
+  function renderAll() {
+    const males = patients.filter(p => p.gender === 'male');
+    const females = patients.filter(p => p.gender === 'female');
+    const todayAdmissions = patients.filter(p => p.date === today).length;
+
+    document.getElementById('stat-total').textContent = patients.length;
+    document.getElementById('stat-male').textContent = males.length;
+    document.getElementById('stat-female').textContent = females.length;
+    document.getElementById('stat-today').textContent = todayAdmissions;
+    document.getElementById('male-count').textContent = males.length;
+    document.getElementById('female-count').textContent = females.length;
+
+    renderGrid('male-grid', 'male-empty', males, 'male');
+    renderGrid('female-grid', 'female-empty', females, 'female');
+  }
+
+  function renderGrid(gridId, emptyId, list, gender) {
+    const grid = document.getElementById(gridId);
+    const emptyEl = document.getElementById(emptyId);
+
+    // Remove old cards (keep empty state)
+    Array.from(grid.children).forEach(child => {
+      if (!child.id.endsWith('-empty')) child.remove();
+    });
+
+    if (list.length === 0) {
+      emptyEl.style.display = 'block';
+      return;
+    }
+    emptyEl.style.display = 'none';
+
+    list.forEach(p => {
+      const card = document.createElement('div');
+      card.className = `patient-card ${gender}`;
+      const admitFormatted = p.date ? new Date(p.date + 'T00:00:00').toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'}) : '—';
+      card.innerHTML = `
+        <button class="delete-btn" onclick="deletePatient(${p.id})" title="Remove patient">✕</button>
+        <div class="card-header">
+          <div>
+            <div class="patient-name">${escape(p.name)}</div>
+            <div class="patient-age">Age: ${escape(p.age)}</div>
+          </div>
+          <div class="gender-dot ${gender}">${gender === 'male' ? '♂' : '♀'}</div>
+        </div>
+        <div class="card-body">
+          <div class="field">
+            <div class="field-label">Admission Date</div>
+            <div class="field-value mono">${admitFormatted}</div>
+          </div>
+          ${p.complaint ? `<div class="field">
+            <div class="field-label">Complaint</div>
+            <div class="field-value">${escape(p.complaint)}</div>
+          </div>` : ''}
+          ${p.diagnosis ? `<div class="field">
+            <div class="field-label">Diagnosis</div>
+            <div><span class="diagnosis-tag ${gender}">${escape(p.diagnosis)}</span></div>
+          </div>` : ''}
+          ${p.history ? `<div class="field">
+            <div class="field-label">History</div>
+            <div class="field-value">${escape(p.history)}</div>
+          </div>` : ''}
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function escape(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>
